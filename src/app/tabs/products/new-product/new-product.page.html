@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/tabs/products">
+
+            </ion-back-button>
+        </ion-buttons>
+        <ion-title>Ingrese el nuevo producto</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-grid>
+        <form [formGroup]="newProductForm">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Nombre:</ion-label>
+                        <ion-input mode="ios" formControlName="prod_name"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Descripción</ion-label>
+                        <ion-textarea mode="md" rows="5" formControlName="prod_description"></ion-textarea>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio porcion</ion-label>
+                        <ion-input mode="md" type="number" formControlName="prod_price"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio pequeña</ion-label>
+                        <ion-input mode="md" type="number" formControlName="prod_priceSm"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio mediana</ion-label>
+                        <ion-input mode="md" type="number" formControlName="prod_priceMed"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio Grande</ion-label>
+                        <ion-input mode="md" type="number" formControlName="prod_priceBig"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-item>
+                <ion-label position="floating">Precio Familiar</ion-label>
+                <ion-input mode="md" type="number" formControlName="prod_priceFam"></ion-input>
+            </ion-item>
+            <ion-button expand="block" (click)="onSaveProduct()">
+                <ion-icon name="save-outline" slot="start"></ion-icon>
+                Guardar
+            </ion-button>
+        </form>
+
+    </ion-grid>
+</ion-content>

@@ -1,0 +1,87 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PriceInt, ProductsService } from '../products.service';
+import { Price } from '../price.model';
+
+@Component({
+  selector: 'app-new-product',
+  templateUrl: './new-product.page.html',
+  styleUrls: ['./new-product.page.scss'],
+})
+export class NewProductPage implements OnInit {
+  newProductForm: FormGroup;
+  prices: Price[] = [];
+  constructor(private productService: ProductsService) { }
+
+  ngOnInit() {
+    this.newProductForm = new FormGroup(
+      {
+        prod_name: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }),
+        prod_price: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required, Validators.min(1)]
+        }),
+        prod_description: new FormControl("", {
+          updateOn: 'blur',
+          validators: [Validators.required, Validators.minLength(20)]
+        }),
+        prod_priceSm: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }),
+        prod_priceMed: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }),
+        prod_priceBig: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }),
+        prod_priceFam: new FormControl("", {
+          updateOn: 'change',
+          validators: [Validators.required]
+        })
+      }
+    )
+  }
+
+  onSaveProduct() {
+    console.log('new');
+    const price1 = new Price();
+    price1.type = "Porción";
+    price1.price = this.newProductForm.value.prod_price
+    const price2 = new Price();
+    price2.type = "Pequeña";
+    price2.price = this.newProductForm.value.prod_priceSm;
+    const price3 = new Price();
+    price3.type = "Mediana";
+    price3.price = this.newProductForm.value.prod_priceMed;
+    const price4 = new Price();
+    price4.type = "Grande";
+    price4.price = this.newProductForm.value.prod_priceBig;
+    const price5 = new Price();
+    price5.type = "Familiar";
+    price5.price = this.newProductForm.value.prod_priceFam;
+    this.prices.push(price1);
+    this.prices.push(price2);
+    this.prices.push(price3);
+    this.prices.push(price4);
+    this.prices.push(price5);
+    console.log(this.prices);
+    this.productService.saveProduct(
+      this.newProductForm.value.prod_name,
+      this.newProductForm.value.prod_description,
+      this.prices
+    ).subscribe(
+      resp => console.log(resp), err => console.log(err)
+    );
+  }
+  new() {
+    console.log('here');
+
+  }
+
+}

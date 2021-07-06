@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { tap} from 'rxjs/operators';
+import { map, tap} from 'rxjs/operators';
 import { Product } from './product.model';
 import { Price } from './price.model';
 
@@ -20,12 +20,35 @@ export interface PriceInt {
 })
 export class ProductsService {
 
-  private _places = new BehaviorSubject<Product[]>([]);
+  private _products = new BehaviorSubject<Product[]>([]);
   public get places() {
-    return this._places.asObservable();
+    return this._products.asObservable();
   }
 
   constructor(private http: HttpClient) { }
+
+  getProducts() {
+    const product = new Product();
+    return this.http.get<Product>('https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas.json').pipe(
+      map(respData => {
+        const products = [];
+        for(const key in respData) {
+          if (respData.hasOwnProperty(key)) {
+            console.log(respData[key].name)
+            product.name = respData[key].name;
+            product.description = respData[key].description;
+            product.prices = respData[key].prices
+          }
+          products.push({...product});
+        }
+        return products;
+      }),
+      tap((products)=> {
+        console.log(products);
+        return this._products.next(products)
+      })
+    );
+  }
 
   saveProduct(name: string, description: string, prices: Price[]) {
     console.log('llega');

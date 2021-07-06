@@ -15,10 +15,11 @@
             <ion-col size="12">
                 <ion-item *ngFor="let product of products" mode="ios">
                     <ion-thumbnail slot="start">
-                        <ion-img [src]="product.image"></ion-img>
+                        <ion-img src="https://w6h5a5r4.rocketcdn.me/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg"></ion-img>
                     </ion-thumbnail>
-                    <ion-label>{{product.name}}</ion-label>
-                    <ion-note slot="end" color="primary">{{product.sizes[0].price |currency}}</ion-note>
+                    <ion-label>{{product.name}}
+                        <p *ngFor="let price of product.prices">{{price.type}} {{price.price | currency}}</p>
+                    </ion-label>
                 </ion-item>
             </ion-col>
         </ion-row>

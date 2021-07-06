@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
+import { Product } from './product.model';
+import { ProductsService } from './products.service';
 
 @Component({
   selector: 'app-products',
@@ -7,26 +10,33 @@ import { Router } from '@angular/router';
   styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {
-  products = [
-    {
-      name: 'Pizza Hawaiana',
-      image: 'https://t2.rg.ltmcdn.com/es/images/0/2/6/img_pizza_hawaiana_de_jamon_y_pina_50620_orig.jpg',
-      sizes: [
-        {
-          type: 'personal',
-          price: 1.5
-        },
-        {
-          type: 'mediana',
-          price: 5.0,
-        }
-      ],
-      description: 'Pizza hawaina, contiene, jamón, piña, queso mozzarella',
-    }
-  ];
-  constructor(private router: Router) {}
+  products: Product[] = [];
+  constructor(private router: Router,
+    private productService: ProductsService,
+            private loadingCtrl: LoadingController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.productService.places.subscribe(
+      resp => {
+        this.products = resp;
+      }
+    )
+  }
+
+  ionViewWillEnter() {
+    this.loadingCtrl.create({
+      message: 'Obteniendo productos'
+    }).then( loadingEl => {
+      loadingEl.present();
+      this.productService.getProducts().subscribe(
+        resp => {
+          console.log(resp)
+          loadingEl.dismiss();
+        }
+      )
+    }
+    )
+  }
 
   onNewProduct() {
     this.router.navigate(['/tabs/products/new-product']);

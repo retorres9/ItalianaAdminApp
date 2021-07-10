@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="tabs/products">
+
+            </ion-back-button>
+        </ion-buttons>
+        <ion-title *ngIf="loadedProduct">{{loadedProduct.name}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card *ngIf="loadedProduct">
+        <ion-img [src]="loadedProduct.image"></ion-img>
+
+        <ion-card-content>
+            {{loadedProduct.description}}
+            <ion-list>
+                <ion-list-header mode="ios">
+                    <ion-label>Precios:</ion-label>
+                </ion-list-header>
+                <ion-item *ngFor="let prices of loadedProduct.prices">{{prices.type}} {{prices.price | currency}}</ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

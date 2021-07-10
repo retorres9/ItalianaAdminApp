@@ -25,6 +25,10 @@ export class NewProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required],
       }),
+      prod_image: new FormControl("", {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
       prod_price: new FormControl('', {
         updateOn: 'change',
         validators: [Validators.required, Validators.min(1)],
@@ -35,19 +39,19 @@ export class NewProductPage implements OnInit {
       }),
       prod_priceSm: new FormControl('', {
         updateOn: 'change',
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(1)],
       }),
       prod_priceMed: new FormControl('', {
         updateOn: 'change',
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(1)],
       }),
       prod_priceBig: new FormControl('', {
         updateOn: 'change',
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(1)],
       }),
       prod_priceFam: new FormControl('', {
         updateOn: 'change',
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(1)],
       }),
     });
   }
@@ -84,6 +88,7 @@ export class NewProductPage implements OnInit {
       .saveProduct(
         this.newProductForm.value.prod_name,
         this.newProductForm.value.prod_description,
+        this.newProductForm.value.prod_image,
         this.prices
       )
       .subscribe(

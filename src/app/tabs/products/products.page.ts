@@ -22,6 +22,14 @@ export class ProductsPage implements OnInit {
       }
     )
   }
+  segmentChanged(e) {
+    console.log(e.detail.value);
+  }
+
+  onViewProduct(id: string) {
+    console.log(id);
+    this.router.navigateByUrl(`tabs/products/${id}`)
+  }
 
   ionViewWillEnter() {
     this.loadingCtrl.create({
@@ -30,7 +38,6 @@ export class ProductsPage implements OnInit {
       loadingEl.present();
       this.productService.getProducts().subscribe(
         resp => {
-          console.log(resp)
           loadingEl.dismiss();
         }
       )

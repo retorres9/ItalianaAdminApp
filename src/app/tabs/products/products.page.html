@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-title>Listado de productos</ion-title>
         <ion-buttons slot="end">
             <ion-button slot="icon-only" (click)="onNewProduct()">
@@ -9,18 +9,47 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-grid>
+<ion-content class="ion-no-padding">
+    <ion-segment (ionChange)="segmentChanged($event)" value="pizzas">
+        <ion-segment-button value="pizzas">
+            <ion-label>Pizzas</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="bebidas">
+            <ion-label>Bebidas</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="postres">
+            <ion-label>Postres</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="ensaladas">
+            <ion-label>Ensaldas</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+    <ion-grid fixed="false">
         <ion-row>
             <ion-col size="12">
-                <ion-item *ngFor="let product of products" mode="ios">
-                    <ion-thumbnail slot="start">
-                        <ion-img src="https://w6h5a5r4.rocketcdn.me/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg"></ion-img>
-                    </ion-thumbnail>
-                    <ion-label>{{product.name}}
-                        <p *ngFor="let price of product.prices">{{price.type}} {{price.price | currency}}</p>
-                    </ion-label>
-                </ion-item>
+                <ion-list>
+                    <ion-item-sliding *ngFor="let product of products">
+                        <ion-item-options side="end">
+                            <ion-item-option>
+                                <ion-icon name="pencil" slot="icon-only"></ion-icon>
+                                Editar
+                            </ion-item-option>
+                        </ion-item-options>
+                        <ion-item mode="ios" (click)="onViewProduct(product.id)">
+                            <ion-thumbnail slot="start">
+                                <ion-img [src]="product.image"></ion-img>
+                            </ion-thumbnail>
+                            <ion-label>{{product.name}}
+                            </ion-label>
+                        </ion-item>
+                        <ion-item-options side="start">
+                            <ion-item-option color="warning">
+                                <ion-icon name="trash" slot="icon-only"></ion-icon>
+                                <ion-label>Dar de baja</ion-label>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
             </ion-col>
         </ion-row>
     </ion-grid>

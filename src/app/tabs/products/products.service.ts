@@ -35,27 +35,29 @@ export class ProductsService {
         for(const key in respData) {
           if (respData.hasOwnProperty(key)) {
             console.log(respData[key].name)
+            product.id = key;
             product.name = respData[key].name;
             product.description = respData[key].description;
-            product.prices = respData[key].prices
+            product.prices = respData[key].prices;
+            product.image = respData[key].image;
           }
           products.push({...product});
         }
         return products;
       }),
       tap((products)=> {
-        console.log(products);
         return this._products.next(products)
       })
     );
   }
 
-  saveProduct(name: string, description: string, prices: Price[]) {
+  saveProduct(name: string, description: string, image: string, prices: Price[]) {
     console.log('llega');
 
     const newProduct = new Product();
     newProduct.name = name;
     newProduct.description = description;
+    newProduct.image = image;
     newProduct.prices = prices;
 
     console.log(newProduct);
@@ -64,6 +66,20 @@ export class ProductsService {
       tap(resp => {
         console.log(resp);
 
+      })
+    );
+  }
+
+  getProduct(id: string) {
+    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas/${id}.json`).pipe(
+      map(respData => {
+        const product = new Product();
+        product.id = respData.id;
+        product.name = respData.name;
+        product.description = respData.description;
+        product.image = respData.image;
+        product.prices = respData.prices;
+        return product;
       })
     );
   }

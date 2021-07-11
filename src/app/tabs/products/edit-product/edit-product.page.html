@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="tabs/products">
+            </ion-back-button>
+        </ion-buttons>
+        <ion-title *ngIf="loadedProduct">Editando {{loadedProduct.name}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid *ngIf="loadedProduct">
+        <form [formGroup]="editProductForm">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Nombre del producto</ion-label>
+                        <ion-input formControlName="prod_name"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Descripción</ion-label>
+                        <ion-textarea rows="2" formControlName="prod_description"></ion-textarea>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Imagen</ion-label>
+                        <ion-input formControlName="prod_image"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio rebanada</ion-label>
+                        <ion-input formControlName="prod_price"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio pequeña</ion-label>
+                        <ion-input formControlName="prod_priceSm"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio mediana</ion-label>
+                        <ion-input formControlName="prod_priceMed"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio grande</ion-label>
+                        <ion-input formControlName="prod_priceBig"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Precio familiar</ion-label>
+                        <ion-input formControlName="prod_priceFam"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-button expand="block" [disabled]="editProductForm.pristine" (click)="onEditProduct()">Guardar</ion-button>
+        </form>
+    </ion-grid>
+</ion-content>

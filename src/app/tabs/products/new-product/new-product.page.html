@@ -9,7 +9,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
     <ion-grid>
         <form [formGroup]="newProductForm">
             <ion-row>
@@ -68,7 +68,7 @@
                 <ion-label position="floating">Precio Familiar</ion-label>
                 <ion-input mode="md" type="number" formControlName="prod_priceFam"></ion-input>
             </ion-item>
-            <ion-button expand="block" (click)="onSaveProduct()">
+            <ion-button expand="block" [disabled]="!newProductForm.valid" (click)="onSaveProduct()">
                 <ion-icon name="save-outline" slot="start"></ion-icon>
                 Guardar
             </ion-button>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { IonItemSliding, LoadingController } from '@ionic/angular';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
 
@@ -16,7 +16,7 @@ export class ProductsPage implements OnInit {
             private loadingCtrl: LoadingController) {}
 
   ngOnInit() {
-    this.productService.places.subscribe(
+    this.productService.products.subscribe(
       resp => {
         this.products = resp;
       }
@@ -29,6 +29,12 @@ export class ProductsPage implements OnInit {
   onViewProduct(id: string) {
     console.log(id);
     this.router.navigateByUrl(`tabs/products/${id}`)
+  }
+
+  onEditProduct(id: string, item: IonItemSliding) {
+    item.close();
+    console.log(id);
+    this.router.navigateByUrl(`tabs/products/edit-product/${id}`);
   }
 
   ionViewWillEnter() {

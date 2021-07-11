@@ -19,7 +19,10 @@
                 <ion-list-header mode="ios">
                     <ion-label>Precios:</ion-label>
                 </ion-list-header>
-                <ion-item *ngFor="let prices of loadedProduct.prices">{{prices.type}} {{prices.price | currency}}</ion-item>
+                <ion-item *ngFor="let prices of loadedProduct.prices">
+                    <ion-label>{{prices.type}}</ion-label>
+                    <ion-note slot="end" color="success">{{prices.price | currency}}</ion-note>
+                </ion-item>
             </ion-list>
         </ion-card-content>
     </ion-card>

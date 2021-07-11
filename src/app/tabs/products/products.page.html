@@ -28,9 +28,9 @@
         <ion-row>
             <ion-col size="12">
                 <ion-list>
-                    <ion-item-sliding *ngFor="let product of products">
+                    <ion-item-sliding *ngFor="let product of products" #ionItemSliding>
                         <ion-item-options side="end">
-                            <ion-item-option>
+                            <ion-item-option (click)="onEditProduct(product.id, ionItemSliding)">
                                 <ion-icon name="pencil" slot="icon-only"></ion-icon>
                                 Editar
                             </ion-item-option>

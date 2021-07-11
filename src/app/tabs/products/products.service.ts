@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { map, tap} from 'rxjs/operators';
+import { map, switchMap, take, tap} from 'rxjs/operators';
 import { Product } from './product.model';
 import { Price } from './price.model';
 
@@ -21,7 +21,7 @@ export interface PriceInt {
 export class ProductsService {
 
   private _products = new BehaviorSubject<Product[]>([]);
-  public get places() {
+  public get products() {
     return this._products.asObservable();
   }
 
@@ -74,7 +74,7 @@ export class ProductsService {
     return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas/${id}.json`).pipe(
       map(respData => {
         const product = new Product();
-        product.id = respData.id;
+        product.id = id;
         product.name = respData.name;
         product.description = respData.description;
         product.image = respData.image;
@@ -82,5 +82,30 @@ export class ProductsService {
         return product;
       })
     );
+  }
+
+  updateProduct(productArr: Product, id: string) {
+    let updatedProduct: Product[];
+    return this.products.pipe(
+      take(1),
+      switchMap((products) => {
+        const updateProductIdx = products.findIndex(
+          (product) => product.id === productArr.id
+        );
+        updatedProduct = [...products];
+        updatedProduct[updateProductIdx] = new Product();
+        updatedProduct[updateProductIdx].id = productArr.id;
+        updatedProduct[updateProductIdx].name = productArr.name;
+        updatedProduct[updateProductIdx].description = productArr.description;
+        updatedProduct[updateProductIdx].image = productArr.image;
+        console.log(productArr.prices);
+
+        updatedProduct[updateProductIdx].prices = productArr.prices;
+        return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas/${id}.json`,{...updatedProduct[updateProductIdx], id: null})
+      }),
+      tap(() => {
+        this._products.next(updatedProduct);
+      })
+    )
   }
 }

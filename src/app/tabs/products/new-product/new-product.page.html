@@ -5,12 +5,13 @@
 
             </ion-back-button>
         </ion-buttons>
-        <ion-title>Ingrese el nuevo producto</ion-title>
+        <ion-title>Ingreso de productos</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-grid>
+    <ion-grid *ngIf="type === 'pizzas'">
+        <h4>Ingrese la nueva pizza</h4>
         <form [formGroup]="newProductForm">
             <ion-row>
                 <ion-col size="12">
@@ -73,6 +74,46 @@
                 Guardar
             </ion-button>
         </form>
-
+    </ion-grid>
+    <ion-grid *ngIf="type !== 'pizzas'">
+        <h4>{{type | titlecase}}</h4>
+        <form [formGroup]="newProduct2Form">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Nombre:</ion-label>
+                        <ion-input mode="ios" formControlName="prod2_name"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Imagen:</ion-label>
+                        <ion-input mode="md" formControlName="prod2_image"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item>
+                        <ion-label position="floating">Descripción</ion-label>
+                        <ion-textarea mode="md" rows="5" formControlName="prod2_description"></ion-textarea>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating">Precio</ion-label>
+                        <ion-input mode="md" type="number" formControlName="prod2_price"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-button expand="block" [disabled]="!newProduct2Form.valid" (click)="onSaveProduct2()">
+                <ion-icon name="save-outline" slot="start"></ion-icon>
+                Guardar
+            </ion-button>
+        </form>
     </ion-grid>
 </ion-content>

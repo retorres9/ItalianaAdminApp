@@ -11,6 +11,7 @@ import { ProductsService } from './products.service';
 })
 export class ProductsPage implements OnInit {
   products: Product[] = [];
+  tab: string = 'pizzas';
   constructor(private router: Router,
     private productService: ProductsService,
             private loadingCtrl: LoadingController) {}
@@ -23,7 +24,10 @@ export class ProductsPage implements OnInit {
     )
   }
   segmentChanged(e) {
-    console.log(e.detail.value);
+    console.log(e)
+    this.tab = e.detail.value;
+    console.log(this.tab);
+
   }
 
   onViewProduct(id: string) {
@@ -52,6 +56,7 @@ export class ProductsPage implements OnInit {
   }
 
   onNewProduct() {
-    this.router.navigate(['/tabs/products/new-product']);
+    console.log(this.tab);
+    this.router.navigate([`/tabs/products/new-product/${this.tab}`]);
   }
 }

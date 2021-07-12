@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../products.service';
 import { Price } from '../price.model';
 import { LoadingController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-product',
@@ -12,14 +12,22 @@ import { Router } from '@angular/router';
 })
 export class NewProductPage implements OnInit {
   newProductForm: FormGroup;
+  newProduct2Form: FormGroup;
   prices: Price[] = [];
+  type: string;
   constructor(
     private productService: ProductsService,
     private loadingCtrl: LoadingController,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(
+      ({tipo}) => {
+        this.type = tipo;
+      }
+    );
     this.newProductForm = new FormGroup({
       prod_name: new FormControl('', {
         updateOn: 'change',
@@ -53,6 +61,25 @@ export class NewProductPage implements OnInit {
         updateOn: 'change',
         validators: [Validators.required, Validators.min(1)],
       }),
+    });
+
+    this.newProduct2Form = new FormGroup({
+      prod2_name: new FormControl('', {
+        updateOn: 'change',
+        validators: [Validators.required],
+      }),
+      prod2_image: new FormControl("", {
+        updateOn: 'change',
+        validators: [Validators.required]
+      }),
+      prod2_price: new FormControl('', {
+        updateOn: 'change',
+        validators: [Validators.required, Validators.min(0)],
+      }),
+      prod2_description: new FormControl('', {
+        updateOn: 'change',
+        validators: [Validators.required, Validators.minLength(5)],
+      })
     });
   }
 
@@ -101,10 +128,24 @@ export class NewProductPage implements OnInit {
         (err) => console.log(err)
       );
       }
-    )
-
+    );
   }
-  new() {
-    console.log('here');
+
+  onSaveProduct2() {
+    const price2 = new Price();
+    price2.type = "";
+    price2.price = this.newProduct2Form.value.prod2_price;
+    this.prices.push(price2);
+    this.productService.saveProduct2(
+      this.newProduct2Form.value.prod2_name,
+      this.newProduct2Form.value.prod2_description,
+      this.newProduct2Form.value.prod2_image,
+      this.prices,
+      this.type
+    ).subscribe(
+      resp => {
+        console.log(resp);
+      }
+    );
   }
 }

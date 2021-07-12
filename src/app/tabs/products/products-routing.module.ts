@@ -9,7 +9,7 @@ const routes: Routes = [
     component: ProductsPage
   },
   {
-    path: 'new-product',
+    path: 'new-product/:tipo',
     loadChildren: () => import('./new-product/new-product.module').then( m => m.NewProductPageModule)
   },
   {

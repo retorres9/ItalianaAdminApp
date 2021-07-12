@@ -108,4 +108,15 @@ export class ProductsService {
       })
     )
   }
+
+  saveProduct2(name: string, description: string, image: string, prices: Price[], type: string) {
+    console.log(type);
+    const product = new Product();
+    product.name = name;
+    product.description = description;
+    product.image = image;
+    product.prices = prices;
+    console.log(product);
+    return this.http.post<{name: string}>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}.json`, {...product, id: null});
+  }
 }

@@ -16,6 +16,7 @@ export class EditProductPage implements OnInit {
   editProductForm: FormGroup;
   prices: Price[] = [];
   prodId: string;
+  type: string;
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductsService,
@@ -25,6 +26,7 @@ export class EditProductPage implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(({ id, type }) => {
+      this.type = type;
       this.productService.getProduct(id, type).subscribe((resp) => {
         this.prodId = id;
         this.loadedProduct = resp;
@@ -97,25 +99,31 @@ export class EditProductPage implements OnInit {
     product.description = this.editProductForm.value.prod_description;
     product.image = this.editProductForm.value.prod_image;
     const price1 = new Price();
-    price1.type = 'Porción';
-    price1.price = this.editProductForm.value.prod_price;
-    const price2 = new Price();
-    price2.type = 'Pequeña';
-    price2.price = this.editProductForm.value.prod_priceSm;
-    const price3 = new Price();
-    price3.type = 'Mediana';
-    price3.price = this.editProductForm.value.prod_priceMed;
-    const price4 = new Price();
-    price4.type = 'Grande';
-    price4.price = this.editProductForm.value.prod_priceBig;
-    const price5 = new Price();
-    price5.type = 'Familiar';
-    price5.price = this.editProductForm.value.prod_priceFam;
-    this.prices.push(price1);
-    this.prices.push(price2);
-    this.prices.push(price3);
-    this.prices.push(price4);
-    this.prices.push(price5);
+    if (this.type === 'pizzas') {
+      price1.type = 'Porción';
+      price1.price = this.editProductForm.value.prod_price;
+      const price2 = new Price();
+      price2.type = 'Pequeña';
+      price2.price = this.editProductForm.value.prod_priceSm;
+      const price3 = new Price();
+      price3.type = 'Mediana';
+      price3.price = this.editProductForm.value.prod_priceMed;
+      const price4 = new Price();
+      price4.type = 'Grande';
+      price4.price = this.editProductForm.value.prod_priceBig;
+      const price5 = new Price();
+      price5.type = 'Familiar';
+      price5.price = this.editProductForm.value.prod_priceFam;
+      this.prices.push(price1);
+      this.prices.push(price2);
+      this.prices.push(price3);
+      this.prices.push(price4);
+      this.prices.push(price5);
+    } else {
+      price1.type = 'Porción';
+      price1.price = this.editProductForm.value.prod_price;
+      this.prices.push(price1);
+    }
     console.log(this.prices);
     product.prices = this.prices;
     this.alert.create({
@@ -129,7 +137,7 @@ export class EditProductPage implements OnInit {
         {
           text: 'Aceptar',
           handler: () => {
-            this.productService.updateProduct(product, this.prodId).subscribe(
+            this.productService.updateProduct(product, this.prodId, this.type).subscribe(
               resp => {
                 this.router.navigateByUrl('tabs/products');
               }

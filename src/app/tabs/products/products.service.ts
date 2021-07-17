@@ -84,7 +84,7 @@ export class ProductsService {
     );
   }
 
-  updateProduct(productArr: Product, id: string) {
+  updateProduct(productArr: Product, id: string, type: string) {
     let updatedProduct: Product[];
     return this.products.pipe(
       take(1),
@@ -101,7 +101,7 @@ export class ProductsService {
         console.log(productArr.prices);
 
         updatedProduct[updateProductIdx].prices = productArr.prices;
-        return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas/${id}.json`,{...updatedProduct[updateProductIdx], id: null})
+        return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}/${id}.json`,{...updatedProduct[updateProductIdx], id: null})
       }),
       tap(() => {
         this._products.next(updatedProduct);

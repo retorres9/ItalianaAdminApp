@@ -136,16 +136,24 @@ export class NewProductPage implements OnInit {
     price2.type = "";
     price2.price = this.newProduct2Form.value.prod2_price;
     this.prices.push(price2);
-    this.productService.saveProduct2(
-      this.newProduct2Form.value.prod2_name,
-      this.newProduct2Form.value.prod2_description,
-      this.newProduct2Form.value.prod2_image,
-      this.prices,
-      this.type
-    ).subscribe(
-      resp => {
-        console.log(resp);
-      }
-    );
+    this.loadingCtrl.create({
+      message: 'Creando producto'
+    }).then(loadingEl => {
+      loadingEl.present();
+      this.productService.saveProduct2(
+        this.newProduct2Form.value.prod2_name,
+        this.newProduct2Form.value.prod2_description,
+        this.newProduct2Form.value.prod2_image,
+        this.prices,
+        this.type
+      ).subscribe(
+        resp => {
+          console.log(resp);
+          this.loadingCtrl.dismiss();
+          this.router.navigateByUrl('tabs/products');
+          this.newProduct2Form.reset();
+        }
+      );
+    })
   }
 }

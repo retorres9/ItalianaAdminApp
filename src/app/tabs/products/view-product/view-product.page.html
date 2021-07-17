@@ -20,7 +20,8 @@
                     <ion-label>Precios:</ion-label>
                 </ion-list-header>
                 <ion-item *ngFor="let prices of loadedProduct.prices">
-                    <ion-label>{{prices.type}}</ion-label>
+                    <ion-label *ngIf="loadedProduct.prices.length > 1">{{prices.type}}</ion-label>
+                    <ion-label *ngIf="loadedProduct.prices.length === 1">Precio unitario:</ion-label>
                     <ion-note slot="end" color="success">{{prices.price | currency}}</ion-note>
                 </ion-item>
             </ion-list>

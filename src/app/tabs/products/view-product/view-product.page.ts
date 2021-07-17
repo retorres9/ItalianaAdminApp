@@ -15,12 +15,13 @@ export class ViewProductPage implements OnInit {
 
   ngOnInit() {
     this.activateRoute.params.subscribe(
-      ({id}) => {
-        this.productService.getProduct(id).subscribe(
+      ({id, type}) => {
+        this.productService.getProduct(id, type).subscribe(
           resp => {
-            this.loadedProduct = resp;
-            console.log(this.loadedProduct);
+            console.log(type);
 
+            this.loadedProduct = resp;
+            console.log(this.loadedProduct.prices.length);
           }
         )
       }

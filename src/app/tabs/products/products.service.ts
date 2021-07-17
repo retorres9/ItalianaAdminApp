@@ -27,9 +27,9 @@ export class ProductsService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts() {
+  getProducts(type: string) {
     const product = new Product();
-    return this.http.get<Product>('https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas.json').pipe(
+    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}.json`).pipe(
       map(respData => {
         const products = [];
         for(const key in respData) {
@@ -70,8 +70,8 @@ export class ProductsService {
     );
   }
 
-  getProduct(id: string) {
-    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas/${id}.json`).pipe(
+  getProduct(id: string, type: string) {
+    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}/${id}.json`).pipe(
       map(respData => {
         const product = new Product();
         product.id = id;

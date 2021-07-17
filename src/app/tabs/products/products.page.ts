@@ -11,6 +11,9 @@ import { ProductsService } from './products.service';
 })
 export class ProductsPage implements OnInit {
   products: Product[] = [];
+  deserts: Product[] = [];
+  beberage: Product[] = [];
+  salads: Product[] = [];
   tab: string = 'pizzas';
   constructor(private router: Router,
     private productService: ProductsService,
@@ -26,19 +29,31 @@ export class ProductsPage implements OnInit {
   segmentChanged(e) {
     console.log(e)
     this.tab = e.detail.value;
-    console.log(this.tab);
+    this.loadingCtrl.create({
+      message: 'Obteniendo productos'
+    }).then(
+      loadingEl => {
+        loadingEl.present();
+        this.productService.getProducts(this.tab).subscribe(
+          resp => {
+            this.products = resp;
+            loadingEl.dismiss();
+          }
+        )
+      }
+    )
 
   }
 
   onViewProduct(id: string) {
     console.log(id);
-    this.router.navigateByUrl(`tabs/products/${id}`)
+    this.router.navigateByUrl(`tabs/products/${id}/${this.tab}`)
   }
 
   onEditProduct(id: string, item: IonItemSliding) {
     item.close();
     console.log(id);
-    this.router.navigateByUrl(`tabs/products/edit-product/${id}`);
+    this.router.navigateByUrl(`tabs/products/edit-product/${id}/${this.tab}`);
   }
 
   ionViewWillEnter() {
@@ -46,7 +61,7 @@ export class ProductsPage implements OnInit {
       message: 'Obteniendo productos'
     }).then( loadingEl => {
       loadingEl.present();
-      this.productService.getProducts().subscribe(
+      this.productService.getProducts(this.tab).subscribe(
         resp => {
           loadingEl.dismiss();
         }

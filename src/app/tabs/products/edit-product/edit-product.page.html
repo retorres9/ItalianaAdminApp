@@ -1,8 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="tabs/products">
-            </ion-back-button>
+            <ion-back-button defaultHref="tabs/products"> </ion-back-button>
         </ion-buttons>
         <ion-title *ngIf="loadedProduct">Editando {{loadedProduct.name}}</ion-title>
     </ion-toolbar>
@@ -30,36 +29,39 @@
                         <ion-input formControlName="prod_image"></ion-input>
                     </ion-item>
                 </ion-col>
+
                 <ion-col size="6">
                     <ion-item>
-                        <ion-label position="floating">Precio rebanada</ion-label>
+                        <ion-label position="floating" *ngIf="loadedProduct.prices.length > 1">Precio rebanada</ion-label>
+                        <ion-label position="floating" *ngIf="loadedProduct.prices.length === 1">Precio </ion-label>
                         <ion-input formControlName="prod_price"></ion-input>
                     </ion-item>
                 </ion-col>
-                <ion-col size="6">
+                <ion-col size="6" *ngIf="loadedProduct.prices.length > 1">
                     <ion-item>
                         <ion-label position="floating">Precio pequeña</ion-label>
                         <ion-input formControlName="prod_priceSm"></ion-input>
                     </ion-item>
                 </ion-col>
-                <ion-col size="6">
+                <ion-col size="6" *ngIf="loadedProduct.prices.length > 1">
                     <ion-item>
                         <ion-label position="floating">Precio mediana</ion-label>
                         <ion-input formControlName="prod_priceMed"></ion-input>
                     </ion-item>
                 </ion-col>
-                <ion-col size="6">
+                <ion-col size="6" *ngIf="loadedProduct.prices.length > 1">
                     <ion-item>
                         <ion-label position="floating">Precio grande</ion-label>
                         <ion-input formControlName="prod_priceBig"></ion-input>
                     </ion-item>
                 </ion-col>
-                <ion-col size="12">
+                <ion-col size="12" *ngIf="loadedProduct.prices.length > 1">
                     <ion-item>
                         <ion-label position="floating">Precio familiar</ion-label>
                         <ion-input formControlName="prod_priceFam"></ion-input>
                     </ion-item>
                 </ion-col>
+
             </ion-row>
             <ion-button expand="block" [disabled]="editProductForm.pristine" (click)="onEditProduct()">Guardar</ion-button>
         </form>

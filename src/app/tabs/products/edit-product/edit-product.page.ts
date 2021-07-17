@@ -24,10 +24,12 @@ export class EditProductPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(({ id }) => {
-      this.productService.getProduct(id).subscribe((resp) => {
+    this.activatedRoute.params.subscribe(({ id, type }) => {
+      this.productService.getProduct(id, type).subscribe((resp) => {
         this.prodId = id;
         this.loadedProduct = resp;
+        console.log(this.loadedProduct);
+        if (type === "pizzas") {
         this.editProductForm = new FormGroup({
           prod_name: new FormControl(this.loadedProduct.name, {
             updateOn: 'change',
@@ -62,6 +64,28 @@ export class EditProductPage implements OnInit {
             validators: [Validators.required, Validators.min(1)],
           }),
         });
+        }
+
+        if (type !== "pizzas") {
+          this.editProductForm = new FormGroup({
+            prod_name: new FormControl(this.loadedProduct.name, {
+              updateOn: 'change',
+              validators: [Validators.required]
+            }),
+            prod_description: new FormControl(this.loadedProduct.description, {
+              updateOn: 'change',
+              validators: [Validators.required]
+            }),
+            prod_image: new FormControl(this.loadedProduct.image, {
+              updateOn: 'change',
+              validators: [Validators.required]
+            }),
+            prod_price: new FormControl(this.loadedProduct.prices[0].price, {
+              updateOn: 'change',
+              validators: [Validators.required, Validators.min(1)],
+            }),
+          });
+          }
       });
     });
   }

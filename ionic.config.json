@@ -1,5 +1,7 @@
 {
   "name": "ItalianaAdminApp",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

@@ -5,7 +5,10 @@ import { ProductsService } from '../products.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Price } from '../price.model';
 import { AlertController } from '@ionic/angular';
-
+import { StorageService } from '../../../storage.service';
+class DateVersion {
+  date: Date
+}
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.page.html',
@@ -21,7 +24,7 @@ export class EditProductPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private productService: ProductsService,
     private alert: AlertController,
-    private router: Router
+    private router: Router, private storage: StorageService
   ) {}
 
   ngOnInit() {
@@ -94,7 +97,8 @@ export class EditProductPage implements OnInit {
 
   onEditProduct() {
     const product = new Product();
-
+    const version = new DateVersion();
+    version.date = new Date();
     product.name = this.editProductForm.value.prod_name;
     product.description = this.editProductForm.value.prod_description;
     product.image = this.editProductForm.value.prod_image;
@@ -139,6 +143,11 @@ export class EditProductPage implements OnInit {
           handler: () => {
             this.productService.updateProduct(product, this.prodId, this.type).subscribe(
               resp => {
+                this.productService.updateVersion(version).subscribe(
+                  resp => {
+                    localStorage.setItem('version', JSON.stringify(version));
+                  }
+                );
                 this.router.navigateByUrl('tabs/products');
               }
             );

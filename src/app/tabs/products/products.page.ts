@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { IonItemSliding, LoadingController } from '@ionic/angular';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
+import { StorageService } from '../../storage.service';
 
 @Component({
   selector: 'app-products',
@@ -14,12 +15,28 @@ export class ProductsPage implements OnInit {
   deserts: Product[] = [];
   beberage: Product[] = [];
   salads: Product[] = [];
+  pizzas: Product[] = [];
   tab: string = 'pizzas';
+  version: Date;
+  needUpdate: boolean = false;
+
   constructor(private router: Router,
     private productService: ProductsService,
-            private loadingCtrl: LoadingController) {}
+            private loadingCtrl: LoadingController,
+            private storage: StorageService) {}
 
   ngOnInit() {
+    const ver = JSON.parse(localStorage.getItem('version'));
+    this.version = ver.date;
+    this.productService.getVersion().subscribe(
+      resp => {
+        (resp.date === this.version) ? (this.needUpdate = false) : (this.needUpdate = true);
+      }
+    )
+    if (!this.needUpdate && ver) {
+      this.products = JSON.parse(localStorage.getItem('pizzas'))
+      return;
+    }
     this.productService.products.subscribe(
       resp => {
         this.products = resp;
@@ -34,6 +51,11 @@ export class ProductsPage implements OnInit {
     }).then(
       loadingEl => {
         loadingEl.present();
+        if (!this.needUpdate) {
+          this.products = JSON.parse(localStorage.getItem(`${this.tab}`))
+          loadingEl.dismiss();
+          return;
+        }
         this.productService.getProducts(this.tab).subscribe(
           resp => {
             this.products = resp;
@@ -42,7 +64,6 @@ export class ProductsPage implements OnInit {
         )
       }
     )
-
   }
 
   onViewProduct(id: string) {

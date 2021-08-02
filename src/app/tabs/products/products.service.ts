@@ -4,11 +4,16 @@ import { BehaviorSubject } from 'rxjs';
 import { map, switchMap, take, tap} from 'rxjs/operators';
 import { Product } from './product.model';
 import { Price } from './price.model';
+import { StorageService } from '../../storage.service';
 
 interface ProductInt {
   name: string;
   description: string;
   prices: PriceInt[]
+}
+
+class DateVersion {
+  date: Date
 }
 
 export interface PriceInt {
@@ -43,6 +48,7 @@ export class ProductsService {
           }
           products.push({...product});
         }
+        localStorage.setItem(`${type}`, JSON.stringify(products))
         return products;
       }),
       tap((products)=> {
@@ -118,5 +124,17 @@ export class ProductsService {
     product.prices = prices;
     console.log(product);
     return this.http.post<{name: string}>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}.json`, {...product, id: null});
+  }
+
+  updateVersion(version: DateVersion) {
+    return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/version.json`, {...version, id: null});
+  }
+
+  getVersion() {
+    return this.http.get<DateVersion>('https://proyectopizza-a1591-default-rtdb.firebaseio.com/version.json').pipe(
+      tap(resp => {
+        console.log(resp);
+      })
+    );
   }
 }

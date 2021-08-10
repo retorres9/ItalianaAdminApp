@@ -21,6 +21,10 @@ const routes: Routes = [
           import('./coupons/coupons.module').then((m) => m.CouponsPageModule),
       },
       {
+        path: 'search',
+        loadChildren: () => import('./search/search.module').then(m => m.SearchPageModule)
+      },
+      {
         path: '',
         redirectTo: 'tabs/products',
         pathMatch: 'full'
@@ -32,6 +36,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'tabs/products',
     pathMatch: 'full'
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
   },
 ];
 

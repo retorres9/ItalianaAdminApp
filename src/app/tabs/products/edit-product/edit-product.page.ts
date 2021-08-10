@@ -102,6 +102,7 @@ export class EditProductPage implements OnInit {
     product.name = this.editProductForm.value.prod_name;
     product.description = this.editProductForm.value.prod_description;
     product.image = this.editProductForm.value.prod_image;
+    product.type = this.type;
     const price1 = new Price();
     if (this.type === 'pizzas') {
       price1.type = 'Porción';

@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Buscar</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-searchbar mode="ios" showCancelButton="focus" debounce="500" animated (ionChange)="searchProduct(searchCriteria)" #searchCriteria></ion-searchbar>
+    <ion-grid *ngIf="search.length > 0">
+        <ion-item *ngFor="let product of search">
+            <ion-avatar slot="start">
+                <img [src]="product.image" alt="">
+            </ion-avatar>
+            <ion-label>
+                {{product.name}}
+            </ion-label>
+        </ion-item>
+
+    </ion-grid>
+</ion-content>

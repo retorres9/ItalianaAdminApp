@@ -12,87 +12,89 @@ import { StorageService } from '../../storage.service';
 })
 export class ProductsPage implements OnInit {
   products: Product[] = [];
-  deserts: Product[] = [];
+  deserts:  Product[] = [];
   beberage: Product[] = [];
-  salads: Product[] = [];
-  pizzas: Product[] = [];
+  salads:   Product[] = [];
+  pizzas:   Product[] = [];
   tab: string = 'pizzas';
   version: Date;
   needUpdate: boolean = false;
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private productService: ProductsService,
-            private loadingCtrl: LoadingController,
-            private storage: StorageService) {}
+    private loadingCtrl: LoadingController,
+    private storage: StorageService
+  ) {}
 
   ngOnInit() {
-    const ver = JSON.parse(localStorage.getItem('version'));
-    this.version = ver.date;
-    this.productService.getVersion().subscribe(
-      resp => {
-        (resp.date === this.version) ? (this.needUpdate = false) : (this.needUpdate = true);
-      }
-    )
-    if (!this.needUpdate && ver) {
-      this.products = JSON.parse(localStorage.getItem('pizzas'))
-      return;
+    let serverVersion;
+    const version = JSON.parse(localStorage.getItem('version'));
+    version === null || version.length === 0
+      ? localStorage.setItem('version', JSON.stringify(''))
+      : (this.version = JSON.parse(localStorage.getItem('version')));
+    this.productService
+      .getVersion()
+      .subscribe((versionFromsServer) => (serverVersion = versionFromsServer));
+    if (serverVersion > this.version) {
+      this.productService.getProducts().subscribe((resp) => console.log(resp));
     }
-    this.productService.products.subscribe(
-      resp => {
-        this.products = resp;
-      }
-    )
+
+    this.productService.products.subscribe((resp) => {
+      this.products = resp.filter((product) => product.type === `${this.tab}`);
+    });
   }
   segmentChanged(e) {
-    console.log(e)
     this.tab = e.detail.value;
-    this.loadingCtrl.create({
-      message: 'Obteniendo productos'
-    }).then(
-      loadingEl => {
+    this.loadingCtrl
+      .create({
+        message: 'Obteniendo productos',
+      })
+      .then((loadingEl) => {
         loadingEl.present();
-        if (!this.needUpdate) {
-          this.products = JSON.parse(localStorage.getItem(`${this.tab}`))
-          loadingEl.dismiss();
-          return;
-        }
-        this.productService.getProducts(this.tab).subscribe(
-          resp => {
-            this.products = resp;
-            loadingEl.dismiss();
+        const asd = JSON.parse(localStorage.getItem('products'));
+        console.log(this.products);
+
+        this.products = asd.filter(
+          (product) => {
+            console.log(product.type);
+            console.log(`${this.tab}`);
+            return product.type === `${this.tab}`
           }
-        )
-      }
-    )
+          );
+          loadingEl.dismiss();
+        console.log(this.products);
+      });
   }
 
   onViewProduct(id: string) {
-    console.log(id);
-    this.router.navigateByUrl(`tabs/products/${id}/${this.tab}`)
+    this.router.navigateByUrl(`tabs/products/${id}/${this.tab}`);
   }
 
   onEditProduct(id: string, item: IonItemSliding) {
     item.close();
-    console.log(id);
     this.router.navigateByUrl(`tabs/products/edit-product/${id}/${this.tab}`);
   }
 
   ionViewWillEnter() {
-    this.loadingCtrl.create({
-      message: 'Obteniendo productos'
-    }).then( loadingEl => {
-      loadingEl.present();
-      this.productService.getProducts(this.tab).subscribe(
-        resp => {
+    this.loadingCtrl
+      .create({
+        message: 'Obteniendo productos',
+      })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.products = JSON.parse(localStorage.getItem(`${this.tab}`));
+        if (this.version && this.products) {
           loadingEl.dismiss();
+          return;
         }
-      )
-    }
-    )
+        this.productService.getProducts().subscribe((resp) => {
+          loadingEl.dismiss();
+        });
+      });
   }
 
   onNewProduct() {
-    console.log(this.tab);
     this.router.navigate([`/tabs/products/new-product/${this.tab}`]);
   }
 }

@@ -16,7 +16,7 @@ export class ViewProductPage implements OnInit {
   ngOnInit() {
     this.activateRoute.params.subscribe(
       ({id, type}) => {
-        this.productService.getProduct(id, type).subscribe(
+        this.productService.getProduct(id).subscribe(
           resp => {
             console.log(type);
 

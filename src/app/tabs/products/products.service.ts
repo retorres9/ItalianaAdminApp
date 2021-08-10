@@ -32,23 +32,23 @@ export class ProductsService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(type: string) {
+  getProducts() {
     const product = new Product();
-    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}.json`).pipe(
+    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/products.json`).pipe(
       map(respData => {
         const products = [];
         for(const key in respData) {
           if (respData.hasOwnProperty(key)) {
-            console.log(respData[key].name)
             product.id = key;
             product.name = respData[key].name;
             product.description = respData[key].description;
             product.prices = respData[key].prices;
             product.image = respData[key].image;
+            product.type = respData[key].type;
           }
           products.push({...product});
         }
-        localStorage.setItem(`${type}`, JSON.stringify(products))
+        localStorage.setItem('products', JSON.stringify(products));
         return products;
       }),
       tap((products)=> {
@@ -57,7 +57,7 @@ export class ProductsService {
     );
   }
 
-  saveProduct(name: string, description: string, image: string, prices: Price[]) {
+  saveProduct(name: string, description: string, image: string, prices: Price[], type: string) {
     console.log('llega');
 
     const newProduct = new Product();
@@ -65,10 +65,11 @@ export class ProductsService {
     newProduct.description = description;
     newProduct.image = image;
     newProduct.prices = prices;
+    newProduct.type = type
 
     console.log(newProduct);
 
-    return this.http.post<{name: string}>('https://proyectopizza-a1591-default-rtdb.firebaseio.com/pizzas.json',{...newProduct, id: null}).pipe(
+    return this.http.post<{name: string}>('https://proyectopizza-a1591-default-rtdb.firebaseio.com/products.json',{...newProduct, id: null}).pipe(
       tap(resp => {
         console.log(resp);
 
@@ -76,8 +77,8 @@ export class ProductsService {
     );
   }
 
-  getProduct(id: string, type: string) {
-    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}/${id}.json`).pipe(
+  getProduct(id: string) {
+    return this.http.get<Product>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/products/${id}.json`).pipe(
       map(respData => {
         const product = new Product();
         product.id = id;
@@ -90,7 +91,7 @@ export class ProductsService {
     );
   }
 
-  updateProduct(productArr: Product, id: string, type: string) {
+  updateProduct(productArr: Product, id: string) {
     let updatedProduct: Product[];
     return this.products.pipe(
       take(1),
@@ -107,7 +108,7 @@ export class ProductsService {
         console.log(productArr.prices);
 
         updatedProduct[updateProductIdx].prices = productArr.prices;
-        return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}/${id}.json`,{...updatedProduct[updateProductIdx], id: null})
+        return this.http.put(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/products/${id}.json`,{...updatedProduct[updateProductIdx], id: null})
       }),
       tap(() => {
         this._products.next(updatedProduct);
@@ -122,8 +123,9 @@ export class ProductsService {
     product.description = description;
     product.image = image;
     product.prices = prices;
+    product.type = type
     console.log(product);
-    return this.http.post<{name: string}>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/${type}.json`, {...product, id: null});
+    return this.http.post<{name: string}>(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/products.json`, {...product, id: null});
   }
 
   updateVersion(version: DateVersion) {

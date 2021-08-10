@@ -116,7 +116,8 @@ export class NewProductPage implements OnInit {
         this.newProductForm.value.prod_name,
         this.newProductForm.value.prod_description,
         this.newProductForm.value.prod_image,
-        this.prices
+        this.prices,
+        this.type
       )
       .subscribe(
         (resp) => {

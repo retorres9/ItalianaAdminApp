@@ -30,7 +30,7 @@ export class EditProductPage implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(({ id, type }) => {
       this.type = type;
-      this.productService.getProduct(id, type).subscribe((resp) => {
+      this.productService.getProduct(id).subscribe((resp) => {
         this.prodId = id;
         this.loadedProduct = resp;
         console.log(this.loadedProduct);
@@ -141,7 +141,7 @@ export class EditProductPage implements OnInit {
         {
           text: 'Aceptar',
           handler: () => {
-            this.productService.updateProduct(product, this.prodId, this.type).subscribe(
+            this.productService.updateProduct(product, this.prodId).subscribe(
               resp => {
                 this.productService.updateVersion(version).subscribe(
                   resp => {

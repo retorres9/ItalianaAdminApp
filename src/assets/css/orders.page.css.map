@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../app/tabs/orders/orders.page.scss"
+    ],
+    "names": [],
+    "file": "orders.page.css"
+}

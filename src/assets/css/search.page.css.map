@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../app/tabs/search/search.page.scss"
+    ],
+    "names": [],
+    "file": "search.page.css"
+}

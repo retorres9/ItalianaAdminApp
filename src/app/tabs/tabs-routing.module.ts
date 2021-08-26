@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('./search/search.module').then(m => m.SearchPageModule)
       },
       {
+        path: 'orders',
+        loadChildren: () => import('./orders/orders.module').then(m => m.OrdersPageModule)
+      },
+      {
         path: '',
         redirectTo: 'tabs/products',
         pathMatch: 'full'
@@ -40,6 +44,10 @@ const routes: Routes = [
   {
     path: 'search',
     loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+  },
+  {
+    path: 'orders',
+    loadChildren: () => import('./orders/orders.module').then( m => m.OrdersPageModule)
   },
 ];
 

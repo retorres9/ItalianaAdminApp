@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../app/tabs/products/new-product/new-product.page.scss"
+    ],
+    "names": [],
+    "file": "new-product.page.css"
+}

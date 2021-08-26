@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../app/tabs/products/edit-product/edit-product.page.scss"
+    ],
+    "names": [],
+    "file": "edit-product.page.css"
+}

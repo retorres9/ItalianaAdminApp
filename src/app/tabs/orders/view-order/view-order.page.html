@@ -1,0 +1,11 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Detalle de orden</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item *ngIf="order">
+        <ion-label>{{order.reference}}</ion-label>
+    </ion-item>
+</ion-content>

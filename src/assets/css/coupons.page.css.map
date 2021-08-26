@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../../app/tabs/coupons/coupons.page.scss"
+    ],
+    "names": [],
+    "file": "coupons.page.css"
+}

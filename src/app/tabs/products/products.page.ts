@@ -4,6 +4,7 @@ import { IonItemSliding, LoadingController } from '@ionic/angular';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
 import { StorageService } from '../../storage.service';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 
 @Component({
   selector: 'app-products',
@@ -24,7 +25,8 @@ export class ProductsPage implements OnInit {
     private router: Router,
     private productService: ProductsService,
     private loadingCtrl: LoadingController,
-    private storage: StorageService
+    private storage: StorageService,
+    private firebaseX: FirebaseX
   ) {}
 
   ngOnInit() {
@@ -43,6 +45,21 @@ export class ProductsPage implements OnInit {
     this.productService.products.subscribe((resp) => {
       this.products = resp.filter((product) => product.type === `${this.tab}`);
     });
+
+    this.firebaseX.getToken()
+  .then(token => console.log(`The token is ${token}`)) // save the token server-side and use it to push notifications to this device
+  .catch(error => console.error('Error getting token', error));
+
+this.firebaseX.onMessageReceived()
+  .subscribe(data => {
+    if (data.tap) {
+      console.log(data);
+      this.router.navigate([`tabs/orders/${data.orderId}`]);
+    }
+  });
+
+this.firebaseX.onTokenRefresh()
+  .subscribe((token: string) => console.log(`Got a new token ${token}`));
   }
   segmentChanged(e) {
     this.tab = e.detail.value;
@@ -97,4 +114,5 @@ export class ProductsPage implements OnInit {
   onNewProduct() {
     this.router.navigate([`/tabs/products/new-product/${this.tab}`]);
   }
+
 }

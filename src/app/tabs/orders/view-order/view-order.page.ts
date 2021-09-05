@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../orders.service';
 import { Order, States } from '../order.model';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { MapComponent } from './map/map.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-view-order',
@@ -13,19 +14,22 @@ import { MapComponent } from './map/map.component';
 export class ViewOrderPage implements OnInit {
   order: Order;
   totalOrder: number;
+  road: string;
+  neighbourhood: string;
+  orderId: string;
 
   geocode: boolean = true;
 
-  road: string;
-  neighbourhood: string;
-
   isError: boolean = false;
+
+  subscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private ordersService: OrdersService,
     private loadingCtrl: LoadingController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -33,7 +37,8 @@ export class ViewOrderPage implements OnInit {
 
   ionViewWillEnter() {
     this.activatedRoute.params.subscribe(({ orderId }) => {
-      console.log(orderId);
+      this.orderId = orderId;
+
       this.loadingCtrl
         .create({
           message: 'Cargando orden',
@@ -41,23 +46,20 @@ export class ViewOrderPage implements OnInit {
         })
         .then((loadingElement) => {
           loadingElement.present();
-          this.ordersService.getOrder(orderId).subscribe((resp) => {
+          this.subscription = this.ordersService.getOrder(orderId).subscribe((resp) => {
             this.order = resp;
-            this.calculateTotal();
-            console.log(this.order);
-
             loadingElement.dismiss();
-            this.ordersService
-      .getGeocode(Number(this.order.latlng[0]), Number(this.order.latlng[1]))
-      .subscribe((resp) => {
-        this.road = resp.address.road;
-        this.neighbourhood = resp.address.neighbourhood;
-        this.geocode = false;
-        this.isError = false;
-      }, (error) => {
-        this.isError = true;
-        loadingElement.dismiss();
-      });
+            this.ordersService.getGeocode(Number(this.order.latlng[0]), Number(this.order.latlng[1]))
+            .subscribe((resp) => {
+              this.road = resp.address.road;
+              this.neighbourhood = resp.address.neighbourhood;
+              this.geocode = false;
+              this.isError = false;
+              this.calculateTotal();
+            }, (error) => {
+              this.isError = true;
+              loadingElement.dismiss();
+            });
           });
         });
     });
@@ -77,6 +79,23 @@ export class ViewOrderPage implements OnInit {
   }
 
   denyOrder() {
+    this.loadingCtrl.create({
+      message: 'Rechazando la orden'
+    }).then(
+      loadingElement => {
+        loadingElement.present();
+        console.log('mostrando orden' + this.orderId);
+
+        this.ordersService.onDenyOrder(this.orderId).subscribe(
+          resp => {
+            console.log(resp);
+
+            this.router.navigate(['tabs/orders']);
+            loadingElement.dismiss();
+          }
+        );
+      }
+    )
 
   }
 

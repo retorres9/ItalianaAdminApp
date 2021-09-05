@@ -20,7 +20,7 @@
         <ion-item>
             <ion-icon *ngIf="!geocode" slot="start" name="navigate-outline"></ion-icon>
             <ion-spinner slot="start" *ngIf="geocode" name="crescent"></ion-spinner>
-            <ion-label *ngIf="!geocode">
+            <ion-label *ngIf="!geocode" class="ion-text-wrap">
                 Calle: {{road}}<br> Barrio: {{neighbourhood}}<br> Referencia: {{order.reference}}
             </ion-label>
             <ion-button *ngIf="!geocode" color="secondary" (click)="onWatchLocation()">

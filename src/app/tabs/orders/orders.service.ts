@@ -29,36 +29,47 @@ export class OrdersService {
         'https://proyectopizza-a1591-default-rtdb.firebaseio.com/orders.json'
       )
       .pipe(
-        map(
-          (respData) => {
-            const orders = [];
-            for (const key in respData) {
-              if (respData.hasOwnProperty(key)) {
-                order.id = key;
-                order.latlng = respData[key].latlng;
-                order.reference = respData[key].reference;
-                order.userId = respData[key].userId;
-                order.date = respData[key].date;
-                order.cart = respData[key].cart;
-              }
-              orders.push({...order});
+        map((respData) => {
+          const orders = [];
+          for (const key in respData) {
+            if (respData.hasOwnProperty(key)) {
+              order.id = key;
+              order.latlng = respData[key].latlng;
+              order.reference = respData[key].reference;
+              order.userId = respData[key].userId;
+              order.date = respData[key].date;
+              order.cart = respData[key].cart;
             }
-            return orders;
+            orders.push({ ...order });
           }
-        ),
-        tap((resp)=> {
+          return orders;
+        }),
+        tap((resp) => {
           return this._orders.next(resp);
-      })
+        })
       );
   }
 
   onDenyOrder(id: string) {
-    return this.http.delete(`https://proyectopizza-a1591-default-rtdb.firebaseio.com/orders/${id}.json`);
+    return this.http
+      .delete(
+        `https://proyectopizza-a1591-default-rtdb.firebaseio.com/orders/${id}.json`
+      )
+      .pipe(
+        switchMap(
+          () => {
+            console.log(this.orders);
+            return this.orders;
+          }
+        )
+      );
   }
 
   getGeocode(lat: number, lon: number) {
     console.log(lat, lon);
 
-    return this.http.get<Address>(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+    return this.http.get<Address>(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+    );
   }
 }

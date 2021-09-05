@@ -11,7 +11,8 @@ import * as Leaflet from 'leaflet';
 export class MapComponent implements OnInit {
   map: Leaflet.map;
   icon = Leaflet.icon({
-      iconUrl: 'assets/marcador-de-mapa.png'
+      iconUrl: 'assets/marcador-de-mapa.png',
+      iconAnchor: [16, 31]
   });
   latlng: string[];
   constructor(private modalCtrl: ModalController) { }

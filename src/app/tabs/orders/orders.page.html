@@ -1,9 +1,22 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>orders</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="primary" class="ion-text-center">
+        <ion-title>Pedidos</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-grid *ngIf="!orders" class="ion-text-center">
+        <ion-label>
+            No hay pedidos activos
+        </ion-label>
+    </ion-grid>
+    <ion-grid *ngIf="orders">
+        <ion-item mode="ios" *ngFor="let order of orders; let idx = index" (click)="watchOrder(order.id)">
+            <ion-label>
+                {{order.userId}}<br>
+                <small>{{order.date | moment}}</small>
+            </ion-label>
 
+        </ion-item>
+    </ion-grid>
 </ion-content>

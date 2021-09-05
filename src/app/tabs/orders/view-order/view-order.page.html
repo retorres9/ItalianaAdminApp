@@ -1,11 +1,49 @@
 <ion-header>
     <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="tabs/orders"></ion-back-button>
+        </ion-buttons>
         <ion-title>Detalle de orden</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-item *ngIf="order">
-        <ion-label>{{order.reference}}</ion-label>
-    </ion-item>
+    <ion-grid *ngIf="order && !isError">
+        <ion-item [color]="colorItemState()">
+            <ion-icon slot="start" name="alert-circle-outline"></ion-icon>
+            <ion-label>{{order.state}}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+            <ion-label>{{order.userId}}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon *ngIf="!geocode" slot="start" name="navigate-outline"></ion-icon>
+            <ion-spinner slot="start" *ngIf="geocode" name="crescent"></ion-spinner>
+            <ion-label *ngIf="!geocode">
+                Calle: {{road}}<br> Barrio: {{neighbourhood}}<br> Referencia: {{order.reference}}
+            </ion-label>
+            <ion-button *ngIf="!geocode" color="secondary" (click)="onWatchLocation()">
+                <ion-icon name="eye-outline"></ion-icon>
+            </ion-button>
+        </ion-item>
+
+        <ion-item-divider>
+            Pedido
+        </ion-item-divider>
+        <ion-item mode="ios" *ngFor="let product of order.cart">
+            <ion-note slot="start">{{product.quantity}}</ion-note>
+            <ion-label>{{product.name}} - {{product.selectedType | currency}}</ion-label>
+            <ion-checkbox *ngIf="order.state === 'Active'" color="success" class="ion-float-right"></ion-checkbox>
+        </ion-item>
+        <ion-item class="ion-text-center">
+            <ion-label>Total {{totalOrder | currency}}</ion-label>
+        </ion-item>
+        <ion-button *ngIf="order.state === 'Pending'" color="secondary" expand="block" (click)="acceptOrder()">Aceptar</ion-button>
+        <ion-button *ngIf="order.state === 'Pending'" color="danger" expand="block" (click)="denyOrder()">Rechazar</ion-button>
+        <ion-button *ngIf="order.state === 'Active'" color="success" expand="block">Generar envío</ion-button>
+    </ion-grid>
+    <ion-grid *ngIf='isError'>
+        <ion-label>Ha ocurrido un error al cargar la orden.</ion-label>
+    </ion-grid>
 </ion-content>

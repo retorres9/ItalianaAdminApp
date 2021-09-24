@@ -84,28 +84,27 @@ export class NewProductPage implements OnInit {
   }
 
   onSaveProduct() {
-    console.log('new');
+    const productForm = this.newProductForm.value;
     const price1 = new Price();
     price1.type = 'Porción';
-    price1.price = this.newProductForm.value.prod_price;
+    price1.price = productForm.prod_price;
     const price2 = new Price();
     price2.type = 'Pequeña';
-    price2.price = this.newProductForm.value.prod_priceSm;
+    price2.price = productForm.prod_priceSm;
     const price3 = new Price();
     price3.type = 'Mediana';
-    price3.price = this.newProductForm.value.prod_priceMed;
+    price3.price = productForm.prod_priceMed;
     const price4 = new Price();
     price4.type = 'Grande';
-    price4.price = this.newProductForm.value.prod_priceBig;
+    price4.price = productForm.prod_priceBig;
     const price5 = new Price();
     price5.type = 'Familiar';
-    price5.price = this.newProductForm.value.prod_priceFam;
+    price5.price = productForm.prod_priceFam;
     this.prices.push(price1);
     this.prices.push(price2);
     this.prices.push(price3);
     this.prices.push(price4);
     this.prices.push(price5);
-    console.log(this.prices);
     this.loadingCtrl.create({
       message: 'Creando producto'
     }).then(
@@ -113,15 +112,14 @@ export class NewProductPage implements OnInit {
         loadingEl.present();
         this.productService
       .saveProduct(
-        this.newProductForm.value.prod_name,
-        this.newProductForm.value.prod_description,
-        this.newProductForm.value.prod_image,
+        productForm.prod_name,
+        productForm.prod_description,
+        productForm.prod_image,
         this.prices,
         this.type
       )
       .subscribe(
         (resp) => {
-          console.log(resp);
           loadingEl.dismiss();
           this.router.navigateByUrl('/tabs/products');
           this.newProductForm.reset();
@@ -133,23 +131,23 @@ export class NewProductPage implements OnInit {
   }
 
   onSaveProduct2() {
+    const productForm2 = this.newProduct2Form.value;
     const price2 = new Price();
     price2.type = "";
-    price2.price = this.newProduct2Form.value.prod2_price;
+    price2.price = productForm2.prod2_price;
     this.prices.push(price2);
     this.loadingCtrl.create({
       message: 'Creando producto'
     }).then(loadingEl => {
       loadingEl.present();
       this.productService.saveProduct2(
-        this.newProduct2Form.value.prod2_name,
-        this.newProduct2Form.value.prod2_description,
-        this.newProduct2Form.value.prod2_image,
+        productForm2.prod2_name,
+        productForm2.prod2_description,
+        productForm2.prod2_image,
         this.prices,
         this.type
       ).subscribe(
         resp => {
-          console.log(resp);
           this.loadingCtrl.dismiss();
           this.router.navigateByUrl('tabs/products');
           this.newProduct2Form.reset();

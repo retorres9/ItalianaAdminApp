@@ -99,26 +99,27 @@ export class EditProductPage implements OnInit {
     const product = new Product();
     const version = new DateVersion();
     version.date = new Date();
-    product.name = this.editProductForm.value.prod_name;
-    product.description = this.editProductForm.value.prod_description;
-    product.image = this.editProductForm.value.prod_image;
+    const editProductForm = this.editProductForm.value;
+    product.name = editProductForm.prod_name;
+    product.description = editProductForm.prod_description;
+    product.image = editProductForm.prod_image;
     product.type = this.type;
     const price1 = new Price();
     if (this.type === 'pizzas') {
       price1.type = 'Porción';
-      price1.price = this.editProductForm.value.prod_price;
+      price1.price = editProductForm.prod_price;
       const price2 = new Price();
       price2.type = 'Pequeña';
-      price2.price = this.editProductForm.value.prod_priceSm;
+      price2.price = editProductForm.prod_priceSm;
       const price3 = new Price();
       price3.type = 'Mediana';
-      price3.price = this.editProductForm.value.prod_priceMed;
+      price3.price = editProductForm.prod_priceMed;
       const price4 = new Price();
       price4.type = 'Grande';
-      price4.price = this.editProductForm.value.prod_priceBig;
+      price4.price = editProductForm.prod_priceBig;
       const price5 = new Price();
       price5.type = 'Familiar';
-      price5.price = this.editProductForm.value.prod_priceFam;
+      price5.price = editProductForm.prod_priceFam;
       this.prices.push(price1);
       this.prices.push(price2);
       this.prices.push(price3);
@@ -126,7 +127,7 @@ export class EditProductPage implements OnInit {
       this.prices.push(price5);
     } else {
       price1.type = 'Porción';
-      price1.price = this.editProductForm.value.prod_price;
+      price1.price = editProductForm.prod_price;
       this.prices.push(price1);
     }
     console.log(this.prices);

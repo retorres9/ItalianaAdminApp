@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Nuevo cupón</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="couponForm">
+        <ion-grid>
+            <ion-item>
+                <ion-label position="floating">Nombre del cupón</ion-label>
+                <ion-input formControlName="name"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Imagen promocional (URL)</ion-label>
+                <ion-input type="url" formControlName="img"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Precio</ion-label>
+                <ion-input type="number" formControlName="price"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Descripción</ion-label>
+                <ion-textarea rows="3" formControlName="description"></ion-textarea>
+            </ion-item>
+            <ion-item>
+                <ion-label>Duración hasta</ion-label>
+                <ion-datetime [min]="minDate" [max]="maxDate" formControlName="validTo"></ion-datetime>
+            </ion-item>
+            <ion-button color="primary" expand="block" [disabled]="!couponForm.valid" (click)="onSaveCoupon()">Guardar</ion-button>
+        </ion-grid>
+    </form>
+</ion-content>

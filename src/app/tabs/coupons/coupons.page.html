@@ -1,9 +1,33 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-title>Coupons</ion-title>
+        <ion-buttons slot="end">
+            <ion-button slot="icon-only" (click)="onNewCoupon()">
+                <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-label>asdasd</ion-label>
+    <ion-grid *ngIf="!coupons" class="ion-text-center">
+        <ion-label>No hay cupónes activos</ion-label>
+
+    </ion-grid>
+    <ion-grid *ngIf="coupons">
+        <ion-item mode="ios" *ngFor="let coupon of coupons">
+            <ion-thumbnail slot="start">
+                <img [src]="coupon.url" alt="">
+            </ion-thumbnail>
+            <ion-label>
+                {{coupon.name}}<br>
+                <small>{{coupon.desc}}</small><br>
+                <small> Valido hasta: {{coupon.validTo | date}}</small>
+            </ion-label>
+            <ion-note slot="end" color="success">
+                {{coupon.price}}
+            </ion-note>
+        </ion-item>
+
+    </ion-grid>
 </ion-content>

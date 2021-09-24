@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: CouponsPage
+  },
+  {
+    path: 'new-coupon',
+    loadChildren: () => import('./new-coupon/new-coupon.module').then( m => m.NewCouponPageModule)
   }
 ];
 

@@ -31,17 +31,17 @@
         <ion-item-divider>
             Pedido
         </ion-item-divider>
-        <ion-item mode="ios" *ngFor="let product of order.cart">
+        <ion-button *ngIf="order.state === 'Active'" color="success" expand="block" (click)="generateDelivery()">Generar envío</ion-button>
+        <ion-item mode="ios" *ngFor="let product of order.cart; let i = index">
             <ion-note slot="start">{{product.quantity}}</ion-note>
             <ion-label>{{product.name}} - {{product.selectedType | currency}}</ion-label>
-            <ion-checkbox *ngIf="order.state === 'Active'" color="success" class="ion-float-right"></ion-checkbox>
         </ion-item>
+
         <ion-item class="ion-text-center">
             <ion-label>Total {{totalOrder | currency}}</ion-label>
         </ion-item>
         <ion-button *ngIf="order.state === 'Pending'" color="secondary" expand="block" (click)="acceptOrder()">Aceptar</ion-button>
         <ion-button *ngIf="order.state === 'Pending'" color="danger" expand="block" (click)="denyOrder()">Rechazar</ion-button>
-        <ion-button *ngIf="order.state === 'Active'" color="success" expand="block">Generar envío</ion-button>
     </ion-grid>
     <ion-grid *ngIf='isError'>
         <ion-label>Ha ocurrido un error al cargar la orden.</ion-label>

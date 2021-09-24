@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrdersService } from '../orders.service';
 import { Order, States } from '../order.model';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './view-order.page.html',
   styleUrls: ['./view-order.page.scss'],
 })
-export class ViewOrderPage implements OnInit {
+export class ViewOrderPage implements OnInit, OnDestroy {
   order: Order;
   totalOrder: number;
   road: string;
@@ -31,6 +31,9 @@ export class ViewOrderPage implements OnInit {
     private modalCtrl: ModalController,
     private router: Router
   ) {}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit() {
   }
@@ -48,6 +51,14 @@ export class ViewOrderPage implements OnInit {
           loadingElement.present();
           this.subscription = this.ordersService.getOrder(orderId).subscribe((resp) => {
             this.order = resp;
+            for (const key in resp.cart) {
+              if (resp.cart.hasOwnProperty(key)) {
+                const element = resp.cart[key];
+                // element.isReady = false;
+                // console.log(element);
+              }
+            }
+
             loadingElement.dismiss();
             this.ordersService.getGeocode(Number(this.order.latlng[0]), Number(this.order.latlng[1]))
             .subscribe((resp) => {
@@ -76,6 +87,11 @@ export class ViewOrderPage implements OnInit {
   acceptOrder() {
     this.order.state = States.active;
     this.colorItemState();
+  }
+
+  generateDelivery() {
+    console.log('Entrega enviada');
+
   }
 
   denyOrder() {

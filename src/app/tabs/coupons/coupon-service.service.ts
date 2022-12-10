@@ -48,8 +48,8 @@ export class CouponService {
           }
           return coupons;
         }),
-        tap((places) => {
-          return this._coupons.next(places);
+        tap((coupons) => {
+          return this._coupons.next(coupons);
         })
       );
   }
